@@ -45,7 +45,79 @@
 
             function moveTarget(){
                 targetX=Math.random()*(canvas.width-100)+50;
+                targetY=Math.random()*(canvas.height-100)+50;
             }
+            function drawGame(){
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+
+                if(gameOver==false){
+                    ctx.fillStyle="red";
+                    ctx.beginPath();
+                    ctx.arc(targetX, targetY, targetRadius,0,Math.PI*2);
+                    ctx.fill();
+                    ctx.strokeStyle="black";
+                    ctx.lineWidth=3;
+                    ctx.stroke();
+                }else{
+                    ctx.fillStyle="black";
+                    ctx.font="40px sans-serif";
+                    ctx.fillText("GAME OVER",280,280);
+                    ctx.font="20px sans-serif";
+                    ctx.fillText("Refresh page to try again!", 290, 330);
+                }
+            }
+            function onTimerTick(){
+                lives=lives-1;
+                livesLabel.innerText=lives;
+                if(lives<=0){
+                    endTheGame();
+                }else{
+                    moveTarget();
+                    drawGame();
+                }
+            }
+            function startTimer(){
+                clearInterval(spawnTimer);
+                spawnTimer=setInterval(onTimerTick, timerSpeed);
+            }
+            function endTheGame(){
+                gameOver=true;
+                clearInterval(spawnTimer);
+                drawGame();
+            }
+            canvas.addEventListener("mousedown", function(event){
+                if(gameOver==true) return;
+
+                var rect=canvas.getBoundingCLientRect();
+                var mouseX=event.clientX-rect.left;
+                var mouseY=event.clientY-rect.top;
+                var dx=mouseX-targetX;
+                var dy=mouseY-targetY;
+                var distance= Math.sqrt(dx*dx+dy*dy);
+
+                if(distance<=targetRadius){
+                    score=score+1;
+                    scoreLabel.innerText=score;
+
+                    if(timerSpeed>600){
+                        timerSpeed=timerSpeed-50;
+                    }
+                    moveTarget();
+                    startTimer();
+                    drawGame();
+                }else{
+                    lives=lives-1;
+                    livesLabel.innerText=lives;
+
+                    if(lives<= 0){
+                        endTheGame();
+                    }else{
+                        moveTarget();
+                        startTimer();
+                        drawGame();
+                    }
+                }
+            })
         </script>
     </body>
 </html>
