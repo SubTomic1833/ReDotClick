@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ReDotClick</title>
+        <style>
+            body{
+                background-color:#222;
+                color:white;
+                font-family:sans-serif;
+                text-align:center;
+                margin:0;
+                overflow:hidden;
+            }
+            #ui{
+                margin-top:10px;
+                font-size:20px;
+            }
+            canvas{
+                background-color:#eee;
+                display:block;
+                margin:20px auto;
+                border:2px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="ui">
+            Score:<span id="scoreLabel">0</span> |
+            Lives:<span id="livesLabel">3</span>
+        </div>
+        <canvas id="myCanvas" width="800" height="600"></canvas>
+        <script>
+            var canvas=document.getElementById("myCanvas");
+            var ctx=canvas.getContext("2d");
+            var scoreLabel=document.getElementById("scoreLabel");
+            var livesLabel=document.getElementById("livesLabel");
+            var score=0;
+            var lives=3;
+            var gameOver=false;
+            var targetX=400;
+            var targetY=300;
+            var targetRadius=30;
+            var spawnTimer;
+            var timerSpeed=1500;
+
+            function moveTarget(){
+                targetX=Math.random()*(canvas.width-100)+50;
+            }
+        </script>
+    </body>
+</html>
