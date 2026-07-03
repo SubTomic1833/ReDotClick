@@ -67,6 +67,30 @@
                     ctx.fillText("START",400,365);
                     return;
                 }
+                if(gameState=="levels"){
+                    ctx.fillStyle="#222";
+                    ctx.fillRect(0,0,canvas.width,canvas.height);
+                    ctx.fillStyle="white";
+                    ctx.textAlign="center";
+                    ctx.font="50px Arial";
+                    ctx.fillText("Select a Level", 400,100);
+                    ctx.fillStyle="red";
+                    ctx.fillRect(250,180,300,60);
+                    ctx.fillStyle="white";
+                    ctx.font="30px Arial";
+                    ctx.fillText("LEVEL 1",400,220);
+
+                    ctx.fillStyle="orange";
+                    ctx.fillRect(250,280,300,60);
+                    ctx.fillStyle="white";
+                    ctx.fillText("LEVEL 2",400,320);
+
+                    ctx.fillStyle="purple";
+                    ctx.fillRect(250,380,300,60);
+                    ctx.fillStyle="white";
+                    ctx.fillText("LEVEL 3",400,420);
+                    return;
+                }
                 if(gameState=="playing"){
                     ctx.clearRect(0,0,canvas.width,canvas.height);
                     ctx.fillStyle="red";
@@ -117,6 +141,13 @@
                 var mouseY=event.clientY-rect.top;
                 if(gameState=="start"){
                     if(mouseX>=300 && mouseX<=500 && mouseY>=320 && mouseY <= 390){
+                        gameState="levels";
+                        drawGame();
+                    }
+                    return;
+                }
+                if(gameState=="levels"){
+                    if(mouseX>=250 && mouseX<=550 && mouseY>=180 && mouseY <= 240){
                         gameState="playing";
                         document.getElementById("ui").style.display="block";
                         moveTarget();
