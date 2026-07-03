@@ -40,7 +40,9 @@
             var targetX=400;
             var targetY=300;
             var targetRadius=30;
-            var spawnTimer;
+            var timeLeft=1500;
+            var lastTime=Date.now();
+            var timerRunning=false;
             var timerSpeed=1500;
             var gameState="start";
             var currentLevel=1;
@@ -50,8 +52,20 @@
                 targetX=Math.random()*(canvas.width-100)+50;
                 targetY=Math.random()*(canvas.height-100)+50;
             }
+            function updateTimer(){
+                if(gameState !="playing")return;
+                let now=Date.now();
+                let delta=now-lastTime;
+                lastTime=now;
+                timeLeft-=delta;
+                if(timeLeft<=0){
+                    timeLeft=timerSpeed;
+                    onTimerTick();
+                }
+            }
             function drawGame(){
                 ctx.clearRect(0,0,canvas.width,canvas.height);
+                updateTimer()
                 if(gameState=="start"){
                     ctx.fillStyle="#222";
                     ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -119,6 +133,13 @@
                     ctx.strokeStyle="black";
                     ctx.lineWidth=3;
                     ctx.stroke();
+                    ctx.fillStyle="black";
+                    ctx.fillRect(250,20,300,20);
+                    ctx.fillStyle="lime";
+                    let percent=timeLeft/timerSpeed;
+                    ctx.fillRect(250,20,300*percent,20);
+                    ctx.strokeStyle="white";
+                    ctx.strokeRect(250,20,300,20);
                 }
                 if(gameState=="gameover"){
                     ctx.fillStyle="#eee";
@@ -132,25 +153,31 @@
                     return;
                 }
             }
-            function onTimerTick(){
-                lives=lives-1;
-                livesLabel.innerText=lives;
-                if(lives<=0){
-                    endTheGame();
-                }else{
-                    moveTarget();
-                    drawGame();
-                }
-            }
-            function startTimer(){
-                clearInterval(spawnTimer);
-                spawnTimer=setInterval(onTimerTick, timerSpeed);
-            }
             function endTheGame(){
                 gameOver=true;
                 gameState="gameover";
                 clearInterval(spawnTimer);
                 drawGame();
+            }
+            function gameLoop(){
+                if(gameState==="playing"){
+                    let now=Date.now();
+                    let delta=now-lastTime;
+                    lastTime=now;
+                    timeLeft-=delta;
+                    if(timeLeft<=0){
+                        timeLeft=1500;
+                        lives--;
+                        livesLabel.innerText=lives;
+                        if(lives<=0){
+                            gameState="gameover"
+                        }else{
+                            moveTarget();
+                        }
+                    }
+                }
+                drawGame();
+                requestAnimationFrame(gameLoop);
             }
             canvas.addEventListener("mousedown", function(event){
                 if(gameOver==true) return;
@@ -177,7 +204,6 @@
                     gameState="playing";
                     document.getElementById("ui").style.display="block";
                     moveTarget();
-                    startTimer();
                     drawGame();
                     return;
                 }
@@ -193,7 +219,8 @@
                         timerSpeed=timerSpeed-50;
                     }
                     moveTarget();
-                    startTimer();
+                    timeLeft=timerSpeed;
+                    lastTime=Date.now();
                     drawGame();
                 }else{
                     lives=lives-1;
@@ -203,12 +230,14 @@
                         endTheGame();
                     }else{
                         moveTarget();
-                        startTimer();
+                        timeLeft=timerSpeed;
+                        lastTime=Date.now();
                         drawGame();
                     }
                 }
             });
-            drawGame();
+            lastTime=Date.now();
+            gameLoop();
         </script>
     </body>
 </html>
