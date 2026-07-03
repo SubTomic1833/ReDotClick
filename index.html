@@ -201,7 +201,11 @@
                     ctx.fillText("LEVEL "+levelCompleteLevel+" COMPLETE!",400,200);
                     ctx.fillStyle="white";
                     ctx.font="24px Arial";
-                    ctx.fillText("You reached 25 points!",400,260);
+                    if(levelCompleteLevel==1){
+                        ctx.fillText("You reached 25 points!",400,260);
+                    }else if(levelCompleteLevel==2){
+                        ctx.fillText("You reached 40 points!",400,260);
+                    }
                     ctx.fillStyle="orange";
                     ctx.fillRect(250,320,300,70);
                     ctx.fillStyle="black";
@@ -321,6 +325,15 @@
                     score=score+1;
                     if(currentLevel==1 && score>=25&&!levelCompleted){
                         levelCompleted=true;
+                        levelCompleteLevel=1;
+                        gameState="levelComplete";
+                        document.getElementById("ui").style.display="none";
+                        timeLeft=0;
+                        drawGame();
+                        return;
+                    }if(currentLevel==2 && score>=40 && !levelCompleted){
+                        levelCompleted=true;
+                        levelCompleteLevel=2;
                         gameState="levelComplete";
                         document.getElementById("ui").style.display="none";
                         timeLeft=0;
