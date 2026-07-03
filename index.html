@@ -43,6 +43,7 @@
             var spawnTimer;
             var timerSpeed=1500;
             var gameState="start";
+            var currentLevel=1;
             document.getElementById("ui").style.display="none";
 
             function moveTarget(){
@@ -89,6 +90,24 @@
                     ctx.fillRect(250,380,300,60);
                     ctx.fillStyle="white";
                     ctx.fillText("LEVEL 3",400,420);
+                    return;
+                }
+                if(gameState=="instructions"){
+                    ctx.fillStyle="#222";
+                    ctx.fillRect(0,0,canvas.width,canvas.height);
+                    ctx.fillStyle="white";
+                    ctx.textAlign="center";
+                    ctx.font="48px Arial";
+                    ctx.fillText("LEVEL 1",400,90);
+                    ctx.font="34px Arial";
+                    ctx.fillText("Instructions",400,150);
+                    ctx.font="24px Arial";
+                    ctx.fillText("Click the red dots within 1.5 second intervals",400,240);
+                    ctx.fillText("Missing a dot makes you lose a life",400,280);
+                    ctx.fillText("Lose all 3 lives, GAMEOVER",400,320);
+                    ctx.fillText("Reach 25 points to complete the level!",400,360);
+                    ctx.font="20px Arial";
+                    ctx.fillText("Click anywhere to begin",400,500);
                     return;
                 }
                 if(gameState=="playing"){
@@ -148,12 +167,18 @@
                 }
                 if(gameState=="levels"){
                     if(mouseX>=250 && mouseX<=550 && mouseY>=180 && mouseY <= 240){
-                        gameState="playing";
-                        document.getElementById("ui").style.display="block";
-                        moveTarget();
-                        startTimer();
+                        currentLevel=1;
+                        gameState="instructions";
                         drawGame();
                     }
+                    return;
+                }
+                if(gameState=="instructions"){
+                    gameState="playing";
+                    document.getElementById("ui").style.display="block";
+                    moveTarget();
+                    startTimer();
+                    drawGame();
                     return;
                 }
                 var dx=mouseX-targetX;
