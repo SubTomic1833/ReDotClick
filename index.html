@@ -42,6 +42,8 @@
             var targetRadius=30;
             var spawnTimer;
             var timerSpeed=1500;
+            var gameState="start";
+            document.getElementById("ui").style.display="none";
 
             function moveTarget(){
                 targetX=Math.random()*(canvas.width-100)+50;
@@ -49,21 +51,34 @@
             }
             function drawGame(){
                 ctx.clearRect(0,0,canvas.width,canvas.height);
-
-                if(gameOver==false){
+                if(gameState=="start"){
+                    ctx.fillStyle="#222";
+                    ctx.fillRect(0,0,canvas.width,canvas.height);
+                    ctx.fillStyle="white";
+                    ctx.font="60px Arial";
+                    ctx.textAlign="center";
+                    ctx.fillText("ReDotClick",400,150);
+                    ctx.font="24px Arial";
+                    ctx.fillText("Click the red dot before the time runs out!", 400,220);
+                    ctx.fillStyle="red";
+                    ctx.fillRect(300,320,200,70);
+                    ctx.fillStyle="white";
+                    ctx.font="32px Arial";
+                    ctx.fillText("START",400,365);
+                    return;
+                }
+                if(gameState=="playing"){
+                    ctx.clearRect(0,0,canvas.width,canvas.height);
                     ctx.fillStyle="red";
                     ctx.beginPath();
-                    ctx.arc(targetX, targetY, targetRadius,0,Math.PI*2);
+                    ctx.arc(targetX,targetY,targetRadius,0,Math.PI*2);
                     ctx.fill();
                     ctx.strokeStyle="black";
                     ctx.lineWidth=3;
                     ctx.stroke();
-                }else{
-                    ctx.fillStyle="black";
-                    ctx.font="40px sans-serif";
-                    ctx.fillText("GAME OVER",280,280);
-                    ctx.font="20px sans-serif";
-                    ctx.fillText("Refresh page to try again!", 290, 330);
+                }
+                if(gameState=="gameover"){
+
                 }
             }
             function onTimerTick(){
@@ -91,6 +106,16 @@
                 var rect=canvas.getBoundingClientRect();
                 var mouseX=event.clientX-rect.left;
                 var mouseY=event.clientY-rect.top;
+                if(gameState=="start"){
+                    if(mouseX>=300 && mouseX<=500 && mouseY>=320 && mouseY <= 390){
+                        gameState="playing";
+                        document.getElementById("ui").style.display="block";
+                        moveTarget();
+                        startTimer();
+                        drawGame();
+                    }
+                    return;
+                }
                 var dx=mouseX-targetX;
                 var dy=mouseY-targetY;
                 var distance= Math.sqrt(dx*dx+dy*dy);
@@ -118,8 +143,6 @@
                     }
                 }
             });
-            moveTarget();
-            startTimer();
             drawGame();
         </script>
     </body>
