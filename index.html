@@ -48,6 +48,7 @@
             var levelCompleteLevel=0;
             var currentLevel=1;
             var levelCompleted=false;
+            var levelIntroLevel=1;
             document.getElementById("ui").style.display="none";
 
             function moveTarget(){
@@ -125,6 +126,28 @@
                     ctx.fillText("Click anywhere to begin",400,500);
                     return;
                 }
+                if(gameState=="level2Instructions"){
+                    ctx.fillStyle="#222";
+                    ctx.fillRect(0,0,canvas.width,canvas.height);
+                    ctx.fillStyle="white";
+                    ctx.textAlign="center";
+                    ctx.font="48px Arial";
+                    ctx.fillText("LEVEL 2",400,100);
+                    ctx.font="34px Arial";
+                    ctx.fillText("Instructions",400,160);
+                    ctx.font="24px Arial";
+                    ctx.fillText("Level 2 is faster!",400,240);
+                    ctx.fillText("You must react quicker",400,280);
+                    ctx.fillText("Missing still costs lives",400,320);
+                    ctx.fillText("Reach 40 points to win",400,360);
+                    ctx.fillStyle="orange";
+                    ctx.fillRect(300,320,200,70);
+                    ctx.fillStyle="black";
+                    ctx.font="28px Arial";
+                    ctx.fillText("START",400,365);
+
+                    return;
+                }
                 if(gameState=="playing"){
                     ctx.clearRect(0,0,canvas.width,canvas.height);
                     ctx.fillStyle="red";
@@ -141,6 +164,22 @@
                     ctx.fillRect(250,20,300*percent,20);
                     ctx.strokeStyle="white";
                     ctx.strokeRect(250,20,300,20);
+                }
+                if(gameState=="levelIntro"){
+                    ctx.fillStyle="#222";
+                    ctx.fillRect(0,0,canvas.width,canvas.height)
+                    ctx.fillStyle="white";
+                    ctx.font="50px Arial";
+                    ctx.textAlign="center";
+                    ctx.fillText("LEVEL "+levelIntroLevel,400,200);
+                    ctx.font="24px Arial";
+                    ctx.fillText("Get ready",400,270);
+                    ctx.fillStyle="orange";
+                    ctx.fillRect(300,320,200,70);
+                    ctx.fillStyle="black";
+                    ctx.font="28px Arial";
+                    ctx.fillText("START",400,365);
+                    return;
                 }
                 if(gameState=="gameover"){
                     ctx.fillStyle="#eee";
@@ -217,9 +256,17 @@
                 if(gameState=="levels"){
                     if(mouseX>=250 && mouseX<=550 && mouseY>=180 && mouseY <= 240){
                         currentLevel=1;
+                        levelIntroLevel=1;
                         gameState="instructions";
                         drawGame();
                     }
+                    else if(mouseX>=250 && mouseX<=550 && mouseY>=280 && mouseY <= 340){
+                        currentLevel=2;
+                        levelIntroLevel=2;
+                        gameState="level2Instructions";
+                        drawGame();
+                    }
+
                     return;
                 }
                 if(gameState=="instructions"){
@@ -234,6 +281,20 @@
                     drawGame();
                     return;
                 }
+                if(gameState=="level2Instructions"){
+                    gameState="playing";
+                    document.getElementById("ui").style.display="block";
+                    moveTarget();
+                    TIMER_DURATION=1000;
+                    timeLeft=TIMER_DURATION;
+                    lastTime=Date.now();
+                    score=0;
+                    lives=2;
+                    scoreLabel.innerText=score;
+                    livesLabel.innerText=lives;
+                    drawGame();
+                    return;
+                }
                 if(gameState=="levelComplete"){
                     if(mouseX>=300 && mouseX<=500 && mouseY >= 320 && mouseY<=390){
                         gameState="levels";
@@ -241,6 +302,13 @@
                         lives=3;
                         currentLevel=1;
                         document.getElementById("ui").style.display="none";
+                        drawGame();
+                    }
+                    return;
+                }
+                if(gameState=="levelIntro"){
+                    if(mouseX>=300 && mouseX<=500 && mouseY >= 320 && mouseY<=390){
+                        gameState="instructions";
                         drawGame();
                     }
                     return;
