@@ -43,8 +43,9 @@
             var timeLeft=1500;
             var lastTime=Date.now();
             var timerRunning=false;
-            var timerSpeed=1500;
+            var TIMER_DURATION=1500;
             var gameState="start";
+            var levelCompleteLevel=0;
             var currentLevel=1;
             document.getElementById("ui").style.display="none";
 
@@ -59,7 +60,7 @@
                 lastTime=now;
                 timeLeft-=delta;
                 if(timeLeft<=0){
-                    timeLeft=timerSpeed;
+                    timeLeft=TIMER_DURATION;
                     onTimerTick();
                 }
             }
@@ -136,7 +137,7 @@
                     ctx.fillStyle="black";
                     ctx.fillRect(250,20,300,20);
                     ctx.fillStyle="lime";
-                    let percent=timeLeft/timerSpeed;
+                    let percent=timeLeft/TIMER_DURATION;
                     ctx.fillRect(250,20,300*percent,20);
                     ctx.strokeStyle="white";
                     ctx.strokeRect(250,20,300,20);
@@ -150,6 +151,23 @@
                     ctx.fillText("GAME OVER",400,280);
                     ctx.font="20px Arial";
                     ctx.fillText("Refresh page to try again!", 400,330);
+                    return;
+                }
+                if(gameState=="levelComplete"){
+                    ctx.fillStyle="#222";
+                    ctx.fillRect(0,0,canvas.width,canvas.height);
+                    ctx.fillStyle="lime";
+                    ctx.font="50px Arial";
+                    ctx.textAlign="center";
+                    ctx.fillText("LEVEL "+levelCompleteLevel+" COMPLETE!",400,200);
+                    ctx.fillStyle="white";
+                    ctx.font="24px Arial";
+                    ctx.fillText("You reached 25 points!",400,260);
+                    ctx.fillStyle="orange";
+                    ctx.fillRect(300,320,200,70);
+                    ctx.fillStyle="black";
+                    ctx.font="28px Arial";
+                    ctx.fillText("LEVEL SELECT",400,365);
                     return;
                 }
             }
@@ -207,19 +225,34 @@
                     drawGame();
                     return;
                 }
+                if(gameState=="levelComplete"){
+                    if(mouseX>=300 && mouseX<=500 && mouseY >= 320 && mouseY<=390){
+                        gameState="levels";
+                        score=0;
+                        lives=3;
+                        currentLevel=1;
+                        document.getElementById("ui").style.display="none";
+                        drawGame();
+                    }
+                    return;
+                }
                 var dx=mouseX-targetX;
                 var dy=mouseY-targetY;
                 var distance= Math.sqrt(dx*dx+dy*dy);
 
                 if(distance<=targetRadius){
                     score=score+1;
-                    scoreLabel.innerText=score;
-
-                    if(timerSpeed>600){
-                        timerSpeed=timerSpeed-50;
+                    if(currentLevel==1 && score>=25){
+                        gameState="levelComplete";
+                        levelCompleteLevel=1;
+                        document.getElementById("ui").style.display="none";
+                        timeLeft=0;
+                        drawGame();
+                        return;
                     }
+                    scoreLabel.innerText=score;
                     moveTarget();
-                    timeLeft=timerSpeed;
+                    timeLeft=TIMER_DURATION;
                     lastTime=Date.now();
                     drawGame();
                 }else{
@@ -230,7 +263,7 @@
                         endTheGame();
                     }else{
                         moveTarget();
-                        timeLeft=timerSpeed;
+                        timeLeft=TIMER_DURATION;
                         lastTime=Date.now();
                         drawGame();
                     }
