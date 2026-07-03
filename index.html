@@ -47,6 +47,7 @@
             var gameState="start";
             var levelCompleteLevel=0;
             var currentLevel=1;
+            var levelCompleted=false;
             document.getElementById("ui").style.display="none";
 
             function moveTarget(){
@@ -66,7 +67,6 @@
             }
             function drawGame(){
                 ctx.clearRect(0,0,canvas.width,canvas.height);
-                updateTimer()
                 if(gameState=="start"){
                     ctx.fillStyle="#222";
                     ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -178,25 +178,29 @@
                 drawGame();
             }
             function gameLoop(){
-                if(gameState==="playing"){
-                    let now=Date.now();
-                    let delta=now-lastTime;
-                    lastTime=now;
-                    timeLeft-=delta;
-                    if(timeLeft<=0){
-                        timeLeft=1500;
+                if(gameState === "playing"){
+                    let now = Date.now();
+                    let delta = now - lastTime;
+                    lastTime = now;
+
+                    timeLeft -= delta;
+
+                    if(timeLeft <= 0){
+                        timeLeft = TIMER_DURATION;
                         lives--;
-                        livesLabel.innerText=lives;
-                        if(lives<=0){
-                            gameState="gameover"
-                        }else{
+                        livesLabel.innerText = lives;
+
+                        if(lives <= 0){
+                            gameState = "gameover";
+                        } else {
                             moveTarget();
                         }
-                    }
+                    }   
                 }
+
                 drawGame();
                 requestAnimationFrame(gameLoop);
-            }
+            }       
             canvas.addEventListener("mousedown", function(event){
                 if(gameOver==true) return;
 
@@ -222,6 +226,11 @@
                     gameState="playing";
                     document.getElementById("ui").style.display="block";
                     moveTarget();
+                    timeLeft=TIMER_DURATION;
+                    lastTime=Date.now();
+                    levelCompleted=false;
+                    score=0;
+                    lives=3;
                     drawGame();
                     return;
                 }
@@ -242,9 +251,9 @@
 
                 if(distance<=targetRadius){
                     score=score+1;
-                    if(currentLevel==1 && score>=25){
+                    if(currentLevel==1 && score>=25&&!levelCompleted){
+                        levelCompleted=true;
                         gameState="levelComplete";
-                        levelCompleteLevel=1;
                         document.getElementById("ui").style.display="none";
                         timeLeft=0;
                         drawGame();
