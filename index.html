@@ -145,8 +145,30 @@
                     ctx.fillStyle="black";
                     ctx.font="28px Arial";
                     ctx.fillText("START",400,495);
-
                     return;
+                }
+                if(gameState=="level3Instructions"){
+                    ctx.fillStyle="#222";
+                    ctx.fillRect(0,0,canvas.width,canvas.height);
+                    ctx.fillStyle="white";
+                    ctx.textAlign="center";
+                    ctx.font="48px Arial";
+                    ctx.fillText("LEVEL 3",400,70);
+                    ctx.font="34px Arial";
+                    ctx.fillText("Instructions",400,120);
+                    ctx.font="22px Arial";
+                    ctx.fillText("Click the red dots within 1 second intervals",400,190);
+                    ctx.fillText("Don't click the blue circles",400,240);
+                    ctx.fillText("they will cost you a life",400,270);
+                    ctx.fillText("If a blue circle appears,",400,340);
+                    ctx.fillText("let the timer run out until",400,370);
+                    ctx.fillText("the next circle spawns.",400,400);
+                    ctx.fillText("Reach 50 points to win!",400,460);
+                    ctx.fillStyle="purple";
+                    ctx.fillRect(300,500,200,60);
+                    ctx.fillStyle="white";
+                    ctx.font="30px Arial";
+                    ctx.filltext("START",400,540);
                 }
                 if(gameState=="playing"){
                     ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -270,7 +292,12 @@
                         gameState="level2Instructions";
                         drawGame();
                     }
-
+                    else if(mouseX>=250 && mouseX<=550 && mouseY>=380 && mouseY <= 440){
+                        currentLevel=3;
+                        levelIntroLevel=2;
+                        gameState="level3Instructions";
+                        drawGame();
+                    }
                     return;
                 }
                 if(gameState=="instructions"){
@@ -299,12 +326,28 @@
                     drawGame();
                     return;
                 }
+                if(gameState=="level3Instructions"){
+                    gameState="playing";
+                    document.getElementById("ui").style.display="block";
+                    moveTarget();
+                    TIMER_DURATION=1000;
+                    timeLeft=TIMER_DURATION;
+                    lastTime=Date.now();
+                    score=0;
+                    lives=3;
+                    scoreLabel.innerText=score;
+                    livesLabel.innerText=lives;
+                    drawGame();
+                    return;
+                }
                 if(gameState=="levelComplete"){
-                    if(mouseX>=300 && mouseX<=500 && mouseY >= 320 && mouseY<=390){
+                    if(mouseX>=250 && mouseX<=550 && mouseY >= 320 && mouseY<=390){
                         gameState="levels";
                         score=0;
                         lives=3;
-                        currentLevel=1;
+                        scoreLabel.innerText=score;
+                        livesLabel=innerText=lives;
+                        TIMER_DURATION=1500;
                         document.getElementById("ui").style.display="none";
                         drawGame();
                     }
