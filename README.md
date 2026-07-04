@@ -2,6 +2,8 @@
 
 A fast-paced arcade style game
 
+## TRY IT FOR YOURSELF : https://subtomic1833.github.io/ReDotClick/
+
 ---
 
 ##  Gameplay
