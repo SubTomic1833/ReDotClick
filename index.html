@@ -271,9 +271,14 @@
                     ctx.fillStyle="black";
                     ctx.font="40px 'Press Start 2P'";
                     ctx.textAlign="center";
-                    ctx.fillText("GAME OVER",400,280);
+                    ctx.fillText("GAME OVER",400,240);
                     ctx.font="20px 'Press Start 2P'";
-                    ctx.fillText("Refresh page to try again!", 400,330);
+                    ctx.fillText("You ran out of lives!", 400,290);
+                    ctx.fillStyle="#444";
+                    ctx.fillRect(200,350,400,70);
+                    ctx.fillStyle="white";
+                    ctx.font="22px 'Press Start 2P'";
+                    ctx.fillText("RETURN TO LEVELS",400,395);
                     return;
                 }
                 if(gameState=="levelComplete"){
@@ -301,9 +306,8 @@
                 }
             }
             function endTheGame(){
-                gameOver=true;
                 gameState="gameover";
-                clearInterval(spawnTimer);
+                gameOver=true;
                 drawGame();
             }
             function gameLoop(){
@@ -337,11 +341,23 @@
                 requestAnimationFrame(gameLoop);
             }       
             canvas.addEventListener("mousedown", function(event){
-                if(gameOver==true) return;
-
                 var rect=canvas.getBoundingClientRect();
                 var mouseX=event.clientX-rect.left;
                 var mouseY=event.clientY-rect.top;
+                if(gameState=="gameover"){
+                    if(mouseX>=250 && mouseX<=550 && mouseY>=350 && mouseY<=420){
+                        gameState="levels";
+                        gameOver=false;
+                        lives=3;
+                        score=0;
+                        TIMER_DURATION=1500;
+                        document.getElementById("ui").style.display="none";
+                        scoreLabel.innerText=score;
+                        livesLabel.innerText=lives;
+                        drawGame();
+                    }
+                    return;
+                }
                 if(gameState=="start"){
                     if(mouseX>=300 && mouseX<=500 && mouseY>=320 && mouseY <= 390){
                         gameState="levels";
