@@ -1,6 +1,6 @@
 #  ReDotClick
 
-A fast-paced arcade style game
+A retro style game where you are given 3 lives, and one goal : click the red dots in order to survive!
 
 ## TRY IT FOR YOURSELF : https://subtomic1833.github.io/ReDotClick/
 
