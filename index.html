@@ -166,6 +166,11 @@
                     ctx.fillText("Reach 25 points to complete the level!",400,360);
                     ctx.font="20px 'Press Start 2P'";
                     ctx.fillText("Click anywhere to begin",400,500);
+                    ctx.fillStyle="#555";
+                    ctx.fillRect(25,525,120,45);
+                    ctx.fillStyle="white";
+                    ctx.font="18px 'Press Start 2P'";
+                    ctx.fillText("BACK",85,555);
                     return;
                 }
                 if(gameState=="level2Instructions"){
@@ -187,6 +192,15 @@
                     ctx.fillStyle="black";
                     ctx.font="28px 'Press Start 2P'";
                     ctx.fillText("START",400,495);
+                    ctx.fillStyle="#555";
+                    ctx.fillRect(25,525,120,45);
+                    ctx.fillStyle="white";
+                    ctx.font="18px 'Press Start 2P'";
+                    ctx.fillStyle="#555";
+                    ctx.fillRect(25,525,120,45);
+                    ctx.fillStyle="white";
+                    ctx.font="18px 'Press Start 2P'";
+                    ctx.fillText("BACK",85,555);
                     return;
                 }
                 if(gameState=="level3Instructions"){
@@ -211,6 +225,12 @@
                     ctx.fillStyle="white";
                     ctx.font="30px 'Press Start 2P'";
                     ctx.fillText("START",400,540);
+                    ctx.fillStyle="#555";
+                    ctx.fillRect(25,525,120,45);
+                    ctx.fillStyle="white";
+                    ctx.font="18px 'Press Start 2P'";
+                    ctx.fillText("BACK",85,555);
+                    return;
                 }
                 if(gameState=="playing"){
                     ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -351,6 +371,11 @@
                     return;
                 }
                 if(gameState=="instructions"){
+                    if(mouseX>=25 && mouseX<=145 && mouseY>=525 && mouseY<=570){
+                        gameState="levels";
+                        drawGame();
+                        return;
+                    }
                     gameState="playing";
                     document.getElementById("ui").style.display="block";
                     moveTarget();
@@ -363,6 +388,11 @@
                     return;
                 }
                 if(gameState=="level2Instructions"){
+                    if(mouseX>=25 && mouseX<=145 && mouseY>=525 && mouseY<=570){
+                        gameState="levels";
+                        drawGame();
+                        return;
+                    }
                     gameState="playing";
                     document.getElementById("ui").style.display="block";
                     moveTarget();
@@ -378,6 +408,11 @@
                     return;
                 }
                 if(gameState=="level3Instructions"){
+                    if(mouseX>=25 && mouseX<=145 && mouseY>=525 && mouseY<=570){
+                        gameState="levels";
+                        drawGame();
+                        return;
+                    }
                     gameState="playing";
                     document.getElementById("ui").style.display="block";
                     moveTarget();
